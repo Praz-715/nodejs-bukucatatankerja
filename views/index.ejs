@@ -1,0 +1,289 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mt-1">
+                <!-- <img src="cap.jpg" width="12" class="card-img-top" alt="..."> -->
+                <div class="card-header">
+                    <h5 class="card-title">Input barang yang sudah di cek</h5>
+                    <% if (msg.length > 0) { %>
+                        <div class="alert alert-success" role="alert">
+                            <%= msg %>
+                        </div>
+                        <% } %>
+                </div>
+                <div class="card-body">
+                    <form action="/add" method="POST">
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="lokasi" class="form-label">Lokasi</label>
+                                    <input type="text" name="lokasi" class="form-control" id="lokasi" style="text-transform:uppercase" required>
+                                    <div id="lokasiHelp" class="form-text">cukup singkatannya saja</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="tipeaset" class="form-label">Tipe Aset</label>
+                                    <input class="form-control border-input" name="tipeaset" style="text-transform:uppercase" list="datalistOptions" id="tipeaset" placeholder="Type to search..." / required>
+                                    <datalist id="datalistOptions">
+                                    <option value="CPU QUICK"></option>
+                                    <option value="CPU Q3"></option>
+                                    <option value="CPU FLEG"></option>
+                                    <option value="CPU ZYREX"></option>
+                                    <option value="CPU SERVER"></option>
+                                    <option value="MINI PC"></option>
+                                    <option value="HUB"></option>
+                                    <option value="PSU"></option>
+                                    <option value="MODEM"></option>
+                                    <option value="MODULE"></option>
+                                </datalist>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sn" class="form-label">No Seri</label>
+                            <input type="text" class="form-control" name="sn" id="sn" style="text-transform:uppercase" required>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="status" id="inlineRadio1" value="ok">
+                            <label class="form-check-label" for="inlineRadio1">OK</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="status" id="inlineRadio2" value="rusak">
+                            <label class="form-check-label" for="inlineRadio2">RUSAK</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="status" id="inlineRadio3" value="supplier">
+                            <label class="form-check-label" for="inlineRadio3">SUPPLIER</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="status" id="inlineRadio4" value="ir">
+                            <label class="form-check-label" for="inlineRadio4">IR</label>
+                        </div>
+                        <br><br>
+                        <div class="ok box">
+                            <div class="mb-3">
+                                <label for="keteranganok" class="form-label">Keterangan OK</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="instal ok" name="instalok" id="instalok" checked>
+                                    <label class="form-check-label" for="instalok">
+                                    Instal OK
+                                </label>
+                                </div>
+                                <!-- <label for="keterangan" class="form-label">Lainnya</label> -->
+                                <textarea class="form-control" name="keteranganok" id="keteranganok" rows="2s" placeholder="Lainnya"></textarea>
+                            </div>
+                        </div>
+                        <div class="rusak box">
+                            <div class="mb-3">
+                                <label for="keteranganrusak" class="form-label">Keterangan RUSAK</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="mb rusak" name="mbrusak" id="mbrusak" checked>
+                                    <label class="form-check-label" for="mbrusak">
+                                    MB Rusak
+                                </label>
+                                </div>
+                                <textarea class="form-control" name="keteranganrusak" id="keteranganrusak" rows="2s" placeholder="Lainnya"></textarea>
+                            </div>
+                        </div>
+                        <div class="supplier box">
+                            <select class="form-select" name="namasupplier">
+                            <option selected hidden value="-">Pilih supplier</option>
+                            <option value="sanye">Sanye</option>
+                            <option value="zyrex">Zyrex</option>
+                            <option value="nts">NTS</option>
+                            <option value="whs">WHS</option>
+                            <option value="sap">SAP</option>
+                        </select>
+                            <div class="mb-3">
+                                <label for="keterangansupplier" class="form-label">Keterangan dikirim supplier</label>
+                                <textarea class="form-control" name="keterangansupplier" id="keterangansupplier" rows="2s"></textarea>
+                            </div>
+                        </div>
+                        <div class="ir box">
+                            <div class="card border-warning mb-3 embeded">
+                                <div class="card-header">Untuk embeded</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="12v" name="ir" id="12v">
+                                                <label class="form-check-label" for="12v">
+                                                12v
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="9v" name="ir" id="9v">
+                                                <label class="form-check-label" for="9v">
+                                                9v
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="5v" name="ir" id="5v">
+                                                <label class="form-check-label" for="5v">
+                                                5v
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="MAX232" name="ir" id="max232">
+                                                <label class="form-check-label" for="max232">
+                                                MAX232
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="SN75176" name="ir" id="sn75176">
+                                                <label class="form-check-label" for="sn75176">
+                                                SN75176
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="ULN2003" name="ir" id="uln2003">
+                                                <label class="form-check-label" for="uln2003">
+                                                ULN2003
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="6N137" name="ir" id="6n137">
+                                                <label class="form-check-label" for="6n137">
+                                                6N137
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="SDCARD" name="ir" id="sdcard">
+                                                <label class="form-check-label" for="sdcard">
+                                                SDCARD
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="CMOS" name="ir" id="cmos">
+                                                <label class="form-check-label" for="cmos">
+                                                CMOS
+                                            </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="card border-warning mb-3 cpupc">
+                                <div class="card-header">Untuk cpu pc</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="mbh81" name="ir" id="mbh81">
+                                                <label class="form-check-label" for="mbh81">
+                                                mbh81
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="psu" name="ir" id="psu">
+                                                <label class="form-check-label" for="psu">
+                                                psu
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="ram" name="ir" id="ram">
+                                                <label class="form-check-label" for="ram">
+                                                ram
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="iocard" name="ir" id="iocard">
+                                                <label class="form-check-label" for="iocard">
+                                                iocard
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="ethernetcard" name="ir" id="ethernetcard">
+                                                <label class="form-check-label" for="ethernetcard">
+                                                ethernetcard
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="hdd" name="ir" id="hdd">
+                                                <label class="form-check-label" for="hdd">
+                                                hdd
+                                            </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="cmos" name="ir" id="cmos">
+                                                <label class="form-check-label" for="cmos">
+                                                cmos
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="tombolpower" name="ir" id="tombolpower">
+                                                <label class="form-check-label" for="tombolpower">
+                                                tombolpower
+                                            </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="fanpro" name="ir" id="fanpro">
+                                                <label class="form-check-label" for="fanpro">
+                                                fanpro
+                                            </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-block">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a href="cekstatus.php" class="btn btn-success">Cek Status</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <h1>Hello, world!</h1> -->
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('input[type="radio"]').click(function() {
+            var inputValue = $(this).attr("value");
+            var targetBox = $("." + inputValue);
+            $(".box").not(targetBox).hide();
+            $(targetBox).show();
+
+            if (inputValue == "ir") {}
+        });
+        $('#tipeaset').change(function() {
+            var embeded = ['CPU QUICK', 'CPU Q3', 'CPU FLEG'];
+            var tipeaset = document.getElementById("tipeaset").value;
+            console.log(tipeaset);
+            if (embeded.includes(tipeaset)) {
+                if (tipeaset == "CPU QUICK") {
+                    $('#sn').val('CQS/');
+                } else if (tipeaset == "CPU Q3") {
+                    $('#sn').val('Q3/');
+                } else if (tipeaset == "CPU FLEG") {
+                    $('#sn').val('CFG/');
+                }
+                $('.cpupc').hide();
+                $('.embeded').show();
+            } else if (["CPU ZYREX", "CPU SERVER", "MINI PC"].includes(tipeaset)) {
+                $('#sn').val('SECP ');
+                $('.embeded').hide();
+                $('.cpupc').show();
+            } else {
+                // $('#sn').val('');
+                $('.embeded').hide();
+                $('.cpupc').hide();
+            }
+
+        });
+    });
+</script>

@@ -1,14 +1,158 @@
 const express = require('express');
-const app = express();
+const expressLayouts = require('express-ejs-layouts');
+const { body, validationResult, check } = require('express-validator');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
 
+const app = express();
 const port = process.env.PORT || 3000;
+
+// Setup connection DB
+require('./utils/db');
+const AssetKerja = require('./models/assetkerja');
+
+// SetUp EJS
+app.set('view engine', 'ejs');
+app.use(expressLayouts);
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+
+// SetUp Flash
+app.use(cookieParser('secret'));
+app.use(session({
+    cookie: { maxAge: 6000 },
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+}));
+app.use(flash());
 
 app.get('/ini', (req, res) => {
     res.send('Hello Mas Teguh');
 });
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+
+app.post('/add', (req, res) => {
+    const lokasi = req.body.lokasi.toUpperCase();
+    const tipeaset = req.body.tipeaset.toUpperCase();
+    const sn = req.body.sn.toUpperCase();
+    const status = req.body.status.toUpperCase();
+    let keterangan = [];
+
+    switch (status) {
+        case 'OK':
+            const instalok = req.body.instalok;
+            if (instalok) {
+                keterangan.push(instalok.toUpperCase())
+            }
+            if (req.body.keteranganok.length > 0) {
+                keterangan.push(req.body.keteranganok.toUpperCase());
+            }
+            break;
+        case 'RUSAK':
+            const mbrusak = req.body.mbrusak;
+            if (mbrusak) {
+                keterangan.push(mbrusak.toUpperCase())
+            }
+            if (req.body.keteranganrusak.length > 0) {
+                keterangan.push(req.body.keteranganrusak.toUpperCase());
+            }
+            break;
+        case 'SUPPLIER':
+            keterangan.push(req.body.keterangansupplier.toUpperCase());
+            keterangan.push("supplier " + req.body.namasupplier.toUpperCase());
+            break;
+        case 'IR':
+            keterangan.push(...req.body.ir);
+            break;
+    }
+    const tanggal = new Date;
+    const upload = tanggal.toISOString().split('T')[0];
+
+    AssetKerja.insertMany({ lokasi, tipeaset, sn, status, keterangan, upload }, (error, result) => {
+            // sebelum redirect kirim flash
+            req.flash('msg', 'Data Contact berhasil ditambahkan');
+            res.redirect('/add');
+        })
+        // res.json(req.body);
 });
+
+app.get('/add', (req, res) => {
+    // console.log(req);
+    res.render('index', { layout: 'layouts/main-layout', title: 'Tambah data', msg: req.flash('msg') })
+});
+
+app.get('/', async(req, res) => {
+
+    // bikin fungsi untuk besoknya
+    const dateTomorrow = (date) => {
+        const sekarang = new Date(date)
+        sekarang.setDate(sekarang.getDate() + 1);
+        return sekarang.toISOString().split('T')[0];
+    };
+
+    // Ambil tanggal untuk pencarian
+    const tanggal = await AssetKerja.distinct('upload');
+
+    // definisi optinfilter untuk query database
+    let optionFilter = {};
+
+    // ambil data dari request GET
+    const dari = req.query.dari;
+    const sampai = req.query.sampai;
+    const status = req.query.status;
+    const semua = req.query.semua;
+    const search = req.query.search;
+
+
+    // Pengecekan filter berdasarkan tanggal
+    if (dari && sampai) {
+        // Kalo tanggal nya sama
+        if (dari === sampai) {
+            // ambil hari esok
+            const besoknya = dateTomorrow(dari);
+            // tambah filter
+            optionFilter = { time: { $gte: new Date(dari), $lte: new Date(besoknya) } };
+        }
+        // Kalo tanggal nya beda
+        else {
+            optionFilter = { time: { $gte: new Date(dari), $lte: new Date(sampai) } };
+        }
+    }
+    // Kalo salah satu diantara tanggal yang terisi cuma 1
+    else if (dari || sampai) {
+        const ininya = dari || sampai;
+        optionFilter = { upload: ininya };
+    }
+    // Kalo gadaada yang terisi tanggal nya ambil hari ini
+    else {
+        const hariini = new Date().toISOString().split('T')[0];
+        optionFilter = { upload: hariini };
+    }
+
+    // Cek apakah ada status yang ditambahkan
+    if (status != undefined) {
+        optionFilter.status = status;
+    }
+
+    // Cek apakah request memenita semua
+    if (search != undefined) {
+        optionFilter = { $or: [{ lokasi: { $regex: search.toUpperCase() } }, { tipeaset: { $regex: search.toUpperCase() } }] }
+    }
+
+    // Cek apakah request memenita semua
+    if (semua != undefined) {
+        optionFilter = null;
+    }
+
+    // ambil data dari Model
+    const data = await AssetKerja.find(optionFilter).catch((err) => { res.redirect('/') });
+
+
+    // tampikan view
+    res.render('cekstatus', { layout: 'layouts/main-layout', title: 'Home', adagak: req.query, data, tanggal });
+
+})
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);

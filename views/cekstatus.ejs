@@ -1,0 +1,108 @@
+<!-- CARD -->
+<div class="card">
+    <div class="card-header">Cek Stusnya</div>
+    <div class="card-body">
+        <form class="row g-3" action="/" method="GET">
+            <div class="col-md-3">
+                <select class="form-select" name="dari" id="dari">
+                    <% if (adagak.dari) { %>
+                        <% const tanggaldari = new Date(adagak.dari).toLocaleString('id-ID').split(' ')[0].replace('/','-').replace('/','-') %> 
+                        <option selected hidden value="<%= adagak.dari %>"><%= tanggaldari %></option>
+                    <% } else { %>
+                        <option selected hidden value="">Dari</option>
+                    <% } %>
+                    <% tanggal.forEach(e => { %>
+                        <% const tanggal = new Date(e).toLocaleString('id-ID').split(' ')[0].replace('/','-').replace('/','-') %> 
+                        <option value="<%= e %>"><%= tanggal %> </option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="sampai" id="sampai">
+                    <% if (adagak.sampai) { %>
+                        <% const tanggalsampai = new Date(adagak.sampai).toLocaleString('id-ID').split(' ')[0].replace('/','-').replace('/','-') %> 
+                        <option selected hidden value="<%= adagak.sampai %>"><%= tanggalsampai %></option>
+                    <% } else { %>
+                        <option selected hidden value="">Sampai</option>
+                    <% } %>
+                    <% tanggal.forEach(e => { %>
+                        <% const tanggal = new Date(e).toLocaleString('id-ID').split(' ')[0].replace('/','-').replace('/','-') %> 
+                        <option value="<%= e %>"><%= tanggal %> </option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <div class="d-grid gap-2 d-md-block">
+                    <button type="submit" class="btn btn-primary mb-3">Confirm</button>
+                    <a href="/" class="btn btn-warning mb-3">Reset</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- START TABLE -->
+    <% if (data) { %>
+        <div class="container table-responsive">
+            <table id="myTable" class="display">
+                <thead>
+                    <tr>
+                        <th>Lokasi</th>
+                        <th>Tipe Aset</th>
+                        <th>Serial Number</th>
+                        <th>Status</th>
+                        <th>Keterangan</th>
+                        <th>Upload</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.forEach(e => { %>
+                        <tr>
+                            <td>
+                                <a href="edit.php?id=<%= e._id %>">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                            </svg>
+                                </a>
+                                <%= e.lokasi %>
+                            </td>
+                            <td>
+                                <%= e.tipeaset %>
+                            </td>
+                            <td>
+                                <%= e.sn %>
+                            </td>
+                            <td>
+                                <%= e.status %>
+                            </td>
+                            <td>
+                                <%= e.keterangan.join(', ') %>
+                            </td>
+                            <td>
+                                <%= e.time.toLocaleDateString() %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <% } else { %>
+            <div class="alert alert-danger" role="alert">
+                DATA TIDAK DITEMUKAN
+            </div>
+            <% } %>
+                <!-- END TABLE -->
+</div>
+<!-- END CARD -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            "paging": false,
+            "scrollY": '60vh',
+            "scrollCollapse": true,
+        });
+    });
+</script>
