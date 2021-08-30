@@ -17,12 +17,12 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="lokasi" class="form-label">Lokasi</label>
-                                    <input type="text" name="lokasi" class="form-control" id="lokasi" style="text-transform:uppercase" required>
+                                    <input type="text" name="lokasi" class="form-control" id="lokasi" style="text-transform:uppercase" value="<%= data.lokasi %>" required>
                                     <div id="lokasiHelp" class="form-text">cukup singkatannya saja</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="tipeaset" class="form-label">Tipe Aset</label>
-                                    <input class="form-control border-input" name="tipeaset" style="text-transform:uppercase" list="datalistOptions" id="tipeaset" placeholder="Type to search..." / required>
+                                    <input class="form-control border-input" name="tipeaset" style="text-transform:uppercase" list="datalistOptions" id="tipeaset" placeholder="Type to search..." value="<%= data.tipeaset %>" required/>
                                     <datalist id="datalistOptions">
                                     <option value="CPU QUICK"></option>
                                     <option value="CPU Q3"></option>
@@ -40,62 +40,73 @@
                         </div>
                         <div class="mb-3">
                             <label for="sn" class="form-label">No Seri</label>
-                            <input type="text" class="form-control" name="sn" id="sn" style="text-transform:uppercase" required>
+                            <input type="text" class="form-control" name="sn" id="sn" style="text-transform:uppercase" value="<%= data.sn %>" required>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="status" id="inlineRadio1" value="ok">
-                            <label class="form-check-label" for="inlineRadio1">OK</label>
+                            <input class="form-check-input" type="radio" name="status" id="inlineRadio1" value="ok" <% if (data.status==='OK' ) { %> checked
+                            <% } %>>
+                                <label class="form-check-label" for="inlineRadio1">OK</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="status" id="inlineRadio2" value="rusak">
-                            <label class="form-check-label" for="inlineRadio2">RUSAK</label>
+                            <input class="form-check-input" type="radio" name="status" id="inlineRadio2" value="rusak" <% if (data.status==='RUSAK' ) { %> checked
+                            <% } %>>
+                                <label class="form-check-label" for="inlineRadio2">RUSAK</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="status" id="inlineRadio3" value="supplier">
-                            <label class="form-check-label" for="inlineRadio3">SUPPLIER</label>
+                            <input class="form-check-input" type="radio" name="status" id="inlineRadio3" value="supplier" <% if (data.status==='SUPPLIER' ) { %> checked
+                            <% } %>>
+                                <label class="form-check-label" for="inlineRadio3">SUPPLIER</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="status" id="inlineRadio4" value="ir">
-                            <label class="form-check-label" for="inlineRadio4">IR</label>
+                            <input class="form-check-input" type="radio" name="status" id="inlineRadio4" value="ir" <% if (data.status==='IR' ) { %> checked
+
+                            <% } %>>
+                                <label class="form-check-label" for="inlineRadio4">IR</label>
                         </div>
                         <br><br>
                         <div class="ok box">
                             <div class="mb-3">
                                 <label for="keteranganok" class="form-label">Keterangan OK</label>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="instal ok" name="instalok" id="instalok" checked>
-                                    <label class="form-check-label" for="instalok">
+                                    <input class="form-check-input" type="checkbox" value="instal ok" name="instalok" id="instalok" <% if (data.keterangan.includes( 'INSTAL OK') && data.status==='OK' ) { %> checked
+                                    <% } %>>
+                                        <label class="form-check-label" for="instalok">
                                     Instal OK
                                 </label>
                                 </div>
                                 <!-- <label for="keterangan" class="form-label">Lainnya</label> -->
-                                <textarea class="form-control" name="keteranganok" id="keteranganok" rows="2s" placeholder="Lainnya"></textarea>
+                                <textarea class="form-control" name="keteranganok" id="keteranganok" rows="2s" placeholder="Lainnya"><% if (!data.keterangan.includes( 'INSTAL OK') && data.status === 'OK') { %><%= data.keterangan %><% } %></textarea>
                             </div>
                         </div>
                         <div class="rusak box">
                             <div class="mb-3">
                                 <label for="keteranganrusak" class="form-label">Keterangan RUSAK</label>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="mb rusak" name="mbrusak" id="mbrusak" checked>
-                                    <label class="form-check-label" for="mbrusak">
+                                    <input class="form-check-input" type="checkbox" value="mb rusak" name="mbrusak" id="mbrusak" <% if (data.keterangan.includes( 'MB RUSAK' ) && data.status==='RUSAK' ) { %> checked
+                                    <% } %>>
+                                        <label class="form-check-label" for="mbrusak">
                                     MB Rusak
                                 </label>
                                 </div>
-                                <textarea class="form-control" name="keteranganrusak" id="keteranganrusak" rows="2s" placeholder="Lainnya"></textarea>
+                                <textarea class="form-control" name="keteranganrusak" id="keteranganrusak" rows="2s" placeholder="Lainnya"><% if (!data.keterangan.includes('MB RUSAK') && data.status === 'RUSAK') { %><%= data.keterangan %><% } %></textarea>
                             </div>
                         </div>
                         <div class="supplier box">
                             <select class="form-select" name="namasupplier">
-                            <option selected hidden value="-">Pilih supplier</option>
-                            <option value="sanye">Sanye</option>
-                            <option value="zyrex">Zyrex</option>
-                            <option value="nts">NTS</option>
-                            <option value="whs">WHS</option>
-                            <option value="sap">SAP</option>
-                        </select>
+                                <% if (data.keterangan && data.status === 'SUPPLIER') { %>
+                                    <option selected value="<%= data.keterangan[1].split(' ')[1] %>"><%= data.keterangan[1].split(' ')[1] %></option>
+                                 <% } else { %>
+                                    <option selected hidden value="-">Pilih supplier</option>
+                                <% } %>
+                                <option value="sanye">Sanye</option>
+                                <option value="zyrex">Zyrex</option>
+                                <option value="nts">NTS</option>
+                                <option value="whs">WHS</option>
+                                <option value="sap">SAP</option>
+                            </select>
                             <div class="mb-3">
                                 <label for="keterangansupplier" class="form-label">Keterangan dikirim supplier</label>
-                                <textarea class="form-control" name="keterangansupplier" id="keterangansupplier" rows="2s"></textarea>
+                                <textarea class="form-control" name="keterangansupplier" id="keterangansupplier" rows="2s"><% if (data.status === 'SUPPLIER') { %><%= data.keterangan[0] %><% } %></textarea>
                             </div>
                         </div>
                         <div class="ir box">
@@ -236,9 +247,10 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="d-grid gap-2 d-md-block">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <a href="/" class="btn btn-success">Cek Status</a>
+                            <button onclick="history.back()" class="btn btn-success">Kembali</button>
                         </div>
                     </form>
                 </div>
@@ -252,6 +264,43 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     $(document).ready(function() {
+        const yangchecked = document.querySelectorAll('input[name="status"]');
+
+        let target;
+        for (const check of yangchecked) {
+            if (check.checked) {
+                target = check;
+            }
+        }
+        console.log(target.value)
+        var targetBox0 = $("." + target.value);
+        $(".box").not(targetBox0).hide();
+        $(targetBox0).show();
+
+
+        var data = <%- JSON.stringify(data) %>;
+
+        if (data.status === 'IR') {
+            if (['CPU QUICK', 'CPU Q3', 'CPU FLEG'].includes(data.tipeaset)) {
+                $('.cpupc').hide();
+                $('.embeded').show();
+            } else if (["CPU ZYREX", "CPU SERVER", "MINI PC"].includes(data.tipeaset)) {
+                $('.embeded').hide();
+                $('.cpupc').show();
+            }
+
+            const yangir = document.querySelectorAll('input[name="ir"]');
+            const keterangan = data.keterangan;
+
+            for (const irnya of yangir) {
+                if (keterangan.includes(irnya.value)) {
+                    irnya.checked = true;
+                }
+            }
+        }
+
+
+
         $('input[type="radio"]').click(function() {
             var inputValue = $(this).attr("value");
             var targetBox = $("." + inputValue);
@@ -261,10 +310,9 @@
             if (inputValue == "ir") {}
         });
         $('#tipeaset').change(function() {
-            var embeded = ['CPU QUICK', 'CPU Q3', 'CPU FLEG'];
             var tipeaset = document.getElementById("tipeaset").value;
             console.log(tipeaset);
-            if (embeded.includes(tipeaset)) {
+            if (['CPU QUICK', 'CPU Q3', 'CPU FLEG'].includes(tipeaset)) {
                 if (tipeaset == "CPU QUICK") {
                     $('#sn').val('CQS/');
                 } else if (tipeaset == "CPU Q3") {
