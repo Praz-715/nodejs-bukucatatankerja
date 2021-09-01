@@ -31,10 +31,15 @@
                     <% }) %>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="d-grid gap-2 d-md-block">
                     <button type="submit" class="btn btn-primary mb-3">Confirm</button>
                     <a href="/" class="btn btn-warning mb-3">Reset</a>
+                    <% if (msg.length > 0) { %>
+                        <div class="alert alert-success d-inline" role="alert">
+                            <%= msg %>
+                        </div>
+                        <% } %>
                 </div>
             </div>
         </form>

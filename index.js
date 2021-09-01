@@ -1,6 +1,7 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const { body, validationResult, check } = require('express-validator');
+const methodOverride = require('method-override');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
@@ -27,6 +28,9 @@ app.use(session({
     saveUninitialized: true,
 }));
 app.use(flash());
+
+// override with the X-HTTP-Method-Override header in the request
+app.use(methodOverride('_method'));
 
 app.get('/ini', (req, res) => {
     res.send('Hello Mas Teguh');
@@ -82,7 +86,22 @@ app.get('/add', (req, res) => {
     res.render('index', { layout: 'layouts/main-layout', title: 'Tambah data', msg: req.flash('msg') })
 });
 
+app.delete('/edit', (req, res) => {
+    const id = req.body.id;
+
+    AssetKerja.findOneAndRemove({ _id: id }, (err, docs) => {
+        if (err) {
+            console.log('Gagal dihapus', err)
+        } else {
+            console.log('Berhasil dihapus')
+            req.flash('edit', 'Data berhasil dihapus');
+            res.redirect('/');
+        }
+    });
+})
+
 app.post('/edit', (req, res) => {
+    const id = req.body.id;
     const lokasi = req.body.lokasi.toUpperCase();
     const tipeaset = req.body.tipeaset.toUpperCase();
     const sn = req.body.sn.toUpperCase();
@@ -117,20 +136,38 @@ app.post('/edit', (req, res) => {
             break;
     }
     const tanggal = new Date;
-    const upload = tanggal.toISOString().split('T')[0];
+    const update = tanggal.toISOString().split('T')[0];
 
-    AssetKerja.insertMany({ lokasi, tipeaset, sn, status, keterangan, upload }, (error, result) => {
-            // sebelum redirect kirim flash
-            req.flash('msg', 'Data Contact berhasil ditambahkan');
-            res.redirect('/edit');
+    AssetKerja.findByIdAndUpdate(id, {
+            $set: {
+                lokasi,
+                tipeaset,
+                sn,
+                status,
+                keterangan,
+                update
+            }
+        },
+        (err, docs) => {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("ini edit post", docs);
+                req.flash('edit', 'Data berhasil diubah');
+                res.redirect('/');
+            }
         })
-        // res.json(req.body);
+
+    // AssetKerja.insertMany({ lokasi, tipeaset, sn, status, keterangan, upload }, (error, result) => {
+    //         // sebelum redirect kirim flash
+    //         req.flash('msg', 'Data Contact berhasil ditambahkan');
+    //         res.redirect('/edit');
+    //     })
+    // res.json(req.body);
 });
 
 app.get('/edit', async(req, res) => {
     const data = await AssetKerja.findById(req.query.id);
-    console.log(data);
-    // console.log(req);
     res.render('edit', { layout: 'layouts/main-layout', title: 'Ubah data', msg: req.flash('msg'), data })
 });
 
@@ -211,7 +248,7 @@ app.get('/', async(req, res) => {
         optionFilter = null;
     }
 
-    console.log(optionFilter)
+    // console.log(optionFilter)
 
     // ambil data dari Model
     const data = await AssetKerja.find(optionFilter);
@@ -219,7 +256,7 @@ app.get('/', async(req, res) => {
 
 
     // tampikan view
-    res.render('cekstatus', { layout: 'layouts/main-layout', title: 'Home', adagak: req.query, data, tanggal });
+    res.render('cekstatus', { layout: 'layouts/main-layout', title: 'Home', adagak: req.query, data, tanggal, msg: req.flash('edit') });
 
 })
 
