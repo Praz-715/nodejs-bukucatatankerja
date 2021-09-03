@@ -67,7 +67,11 @@ app.post('/add', (req, res) => {
             keterangan.push("supplier " + req.body.namasupplier.toUpperCase());
             break;
         case 'IR':
-            keterangan.push(...req.body.ir);
+            if (Array.isArray(req.body.ir)) {
+                keterangan.push(...req.body.ir);
+            } else {
+                keterangan.push(req.body.ir);
+            }
             break;
     }
     const tanggal = new Date;
@@ -132,7 +136,11 @@ app.post('/edit', (req, res) => {
             keterangan.push("supplier " + req.body.namasupplier.toUpperCase());
             break;
         case 'IR':
-            keterangan.push(...req.body.ir);
+            if (Array.isArray(req.body.ir)) {
+                keterangan.push(...req.body.ir);
+            } else {
+                keterangan.push(req.body.ir);
+            }
             break;
     }
     const tanggal = new Date;
@@ -152,18 +160,11 @@ app.post('/edit', (req, res) => {
             if (err) {
                 console.log(err)
             } else {
-                console.log("ini edit post", docs);
+                // console.log("ini edit post", docs);
                 req.flash('edit', 'Data berhasil diubah');
                 res.redirect('/');
             }
         })
-
-    // AssetKerja.insertMany({ lokasi, tipeaset, sn, status, keterangan, upload }, (error, result) => {
-    //         // sebelum redirect kirim flash
-    //         req.flash('msg', 'Data Contact berhasil ditambahkan');
-    //         res.redirect('/edit');
-    //     })
-    // res.json(req.body);
 });
 
 app.get('/edit', async(req, res) => {
