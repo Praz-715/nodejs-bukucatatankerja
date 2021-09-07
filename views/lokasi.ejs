@@ -1,0 +1,60 @@
+<!-- CARD -->
+<div class="card">
+    <div class="card-header">Cek Lokasi</div>
+    <div class="card-body">
+    </div>
+    <!-- START TABLE -->
+    <% if (data) { %>
+        <div class="container table-responsive">
+            <table id="myTable" class="display">
+                <thead>
+                    <tr>
+                        <th>Kode</th>
+                        <th>Lokasi</th>
+                        <th>L/M</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.forEach(e => { %>
+                        <tr class="<% if (!e.is_leasing) { %>
+                            bg-danger bg-gradient
+                        <% } %>">
+                            <td>
+                                <%= e.kode %>
+                            </td>
+                            <td>
+                                <%= e.lokasi %>
+                            </td>
+                            <td>
+                                <% if (e.is_leasing) { %>
+                                    L
+                                    <% } else { %>
+                                        M
+                                        <% } %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <% } else { %>
+            <div class="alert alert-danger" role="alert">
+                DATA TIDAK DITEMUKAN
+            </div>
+            <% } %>
+                <!-- END TABLE -->
+</div>
+<!-- END CARD -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            // "paging": false,
+            // "scrollY": '60vh',
+            // "scrollCollapse": true,
+        });
+    });
+</script>

@@ -1,0 +1,8 @@
+<div class="list-group mt-4">
+    <% reports.forEach(report => { %>
+        <a href="/export?file=<%= report.name %>" class="list-group-item list-group-item-action">
+            <%= report.name %>
+        </a>
+        <% }) %>
+
+</div>

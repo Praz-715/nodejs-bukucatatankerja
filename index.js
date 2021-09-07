@@ -6,12 +6,18 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 
+
+
+const exportCatatanKerjaToExcel = require('./utils/exportService');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Setup connection DB
 require('./utils/db');
+const Report = require('./models/report');
 const AssetKerja = require('./models/assetkerja');
+const Lokasi = require('./models/lokasi');
 
 // SetUp EJS
 app.set('view engine', 'ejs');
@@ -171,6 +177,102 @@ app.post('/edit', (req, res) => {
 app.get('/edit', async(req, res) => {
     const data = await AssetKerja.findById(req.query.id);
     res.render('edit', { layout: 'layouts/main-layout', title: 'Ubah data', msg: req.flash('msg'), data })
+});
+
+app.post('/export', async(req, res) => {
+    const excelOrPrint = req.body.excel || req.body.print;
+    const cekArray = (arrayOrString) => Array.isArray(arrayOrString) ? arrayOrString : [arrayOrString];
+    const pilihan = cekArray(req.body.pilihan);
+    const opsi = req.body.opsi;
+    let optionsFilter = { status: { $in: pilihan } };
+    let opsinya;
+
+
+    const hariini = new Date();
+
+    switch (opsi) {
+        case 'hariini':
+            optionsFilter.upload = hariini.toISOString().split('T')[0];
+            opsinya = `per tanggal ${hariini.toLocaleDateString('id-ID').split(' ')[0].replace('/','-').replace('/','-')}`;
+            break;
+        case 'bulanini':
+            optionsFilter.time = {
+                $gte: new Date(hariini.getFullYear(), hariini.getMonth(), 1),
+                $lte: new Date(hariini.getFullYear(), hariini.getMonth() + 1, 1)
+            }
+            opsinya = `per bulan ${hariini.toLocaleString('id-ID', { month: 'long', year: 'numeric' })}`;
+            break;
+        case 'tahunini':
+            optionsFilter.time = {
+                $gte: new Date(hariini.getFullYear(), 0, 1),
+                $lte: new Date(hariini.getFullYear() + 1, 0, 1)
+            }
+            opsinya = `per tahun ${hariini.toLocaleString('id-ID', { year: 'numeric' })}`;
+            break;
+        case 'pertanggal':
+            const dari = new Date(req.body.dari);
+            const sampai = new Date(req.body.sampai);
+            optionsFilter.time = {
+                $gte: new Date(dari),
+                $lte: new Date(sampai.getFullYear(), sampai.getMonth(), sampai.getDate() + 1)
+            }
+            opsinya = `per dari ${dari.toLocaleDateString('id-ID').split(' ')[0].replace('/','-').replace('/','-')} sampai ${sampai.toLocaleDateString('id-ID').split(' ')[0].replace('/','-').replace('/','-')}`;
+            break;
+        default:
+            res.status(404).send(404);
+    }
+
+    switch (excelOrPrint) {
+        case 'excel':
+            const data = await AssetKerja.find(optionsFilter);
+            const workSheetColumnNames = ['Lokasi', 'Tipe Aset', 'Serial Number', 'Status', 'Keterangan', 'Tanggal'];
+            const workSheetName = 'CatatanKerja';
+            const pesan = `${hariini.toLocaleString('id-ID').replace('/','-').replace('/','-')} - Catatan kerja ${pilihan} - ${opsinya}`;
+            const filePath = './outputFiles//' + pesan + '.xlsx';
+            exportCatatanKerjaToExcel(data, workSheetColumnNames, workSheetName, filePath);
+            Report.insertMany({ name: pesan, filePath: './outputFiles/' + pesan + '.xlsx' }, (error, result) => {
+                res.download('./outputFiles/' + pesan + '.xlsx');
+            })
+            break;
+        case 'print':
+            break;
+        default:
+            res.status(404).send("<h1>404</h1>");
+    }
+
+    // console.log(optionsFilter)
+    // res.send(data)
+
+});
+
+app.get('/lokasi', async(req, res) => {
+
+    // Inserting
+    // const fileBuffer = fs.readFileSync('./models/lokasi.json', 'utf-8');
+    // const insert = JSON.parse(fileBuffer);
+
+    // insert.forEach(element => {
+    //     console.log("foreeach");
+    //     Lokasi.insertMany(element, (err, info) => {
+    //         if (err) {
+    //             console.log(err)
+    //         }
+    //     })
+    // });
+
+    const data = await Lokasi.find();
+    res.render('lokasi', { layout: 'layouts/main-layout', title: 'Laporan', data });
+
+});
+
+app.get('/report', (req, res) => {
+
+});
+
+app.get('/reports', async(req, res) => {
+    reports = await Report.find();
+    res.render('reports', { layout: 'layouts/main-layout', title: 'Laporan', reports });
+
 });
 
 app.get('/', async(req, res) => {

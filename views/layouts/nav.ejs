@@ -21,11 +21,126 @@
                         <li><a class="dropdown-item" href="/?status=IR">IR</a></li>
                     </ul>
                 </li>
-            </ul>
-            <form action="/" class="d-flex" method="GET">
-                <input class="form-control me-2" name="search" style="text-transform:uppercase" type="search" placeholder="Cari Lokasi" aria-label="Search" style="text-transform:uppercase">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="/lokasi">Cek Lokasi</a>
+                </li>
+                <li>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Export
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Export</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="/export" method="post">
+                                    <div class="modal-body">
+
+                                        <div class="mb-3 row">
+                                            <h5>Pilih</h5>
+                                            <div class="col">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="OK" id="OK" name="pilihan">
+                                                    <label class="form-check-label" for="OK">
+                                                      OK
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="RUSAK" id="RUSAK" name="pilihan">
+                                                    <label class="form-check-label" for="RUSAK">
+                                                      RUSAK
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="SUPPLIER" id="SUPPLIER" name="pilihan">
+                                                    <label class="form-check-label" for="SUPPLIER">
+                                                        SUPPLIER
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="IR" id="IR" name="pilihan">
+                                                    <label class="form-check-label" for="IR">
+                                                        IR
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <% const tanggalsekarang = new Date %>
+                                                <span class="input-group-text">Gimana</span>
+                                                <div class="d-block mx-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="opsi" value="hariini" id="hariini">
+                                                        <label class="form-check-label" for="hariini">
+                                                      hari ini (<%= tanggalsekarang.toLocaleString('id-ID', { dateStyle: 'medium' }) %>)
+                                                    </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="opsi" value="bulanini" id="bulanini">
+                                                        <label class="form-check-label" for="bulanini">
+                                                      bulan ini (<%= tanggalsekarang.toLocaleString('id-ID', { month: 'long' }) %>)
+                                                    </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="opsi" value="tahunini" id="tahunini">
+                                                        <label class="form-check-label" for="tahunini">
+                                                      tahun ini (<%= tanggalsekarang.toLocaleString('id-ID', { year: 'numeric' }) %>)
+                                                    </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" onclick="document.getElementById('bungkus').style.display = 'block';" type="radio" name="opsi" value="pertanggal" id="pertanggal">
+                                                        <label class="form-check-label" for="pertanggal">
+                                                      per tanggal
+                                                    <div style="display: none;" id="bungkus">
+                                                        <div class="mb-3 row">
+                                                              <label for="dari" class="col-sm-2 col-form-label">From</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="date" name="dari" class="form-control" id="dari">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <label for="sampai" class="col-sm-2 col-form-label">To</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="date" name="sampai" class="form-control" id="sampai">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                </label>
+                                        </div>
+                                    </div>
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a href="reports" name="print" value="print" class="btn btn-info">LIST REPORT</a>
+                            <button type="submit" name="excel" value="excel" class="btn btn-success">EXCEL</button>
+                            <button type="submit" name="print" value="print" class="btn btn-primary">PRINT</button>
+                        </div>
+                        </form>
+                    </div>
         </div>
+    </div>
+
+    </li>
+    </ul>
+    <form action="/" class="d-flex" method="GET">
+        <input class="form-control me-2" name="search" style="text-transform:uppercase" type="search" placeholder="Cari Lokasi" aria-label="Search" style="text-transform:uppercase">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+    </div>
     </div>
 </nav>
