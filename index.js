@@ -344,7 +344,13 @@ app.get('/', async(req, res) => {
 
     // Cek apakah request memenita semua
     if (search != undefined) {
-        optionFilter = { $or: [{ lokasi: { $regex: search.toUpperCase() } }, { tipeaset: { $regex: search.toUpperCase() } }] }
+        optionFilter = {
+            $or: [
+                { lokasi: { $regex: search.toUpperCase() } },
+                { tipeaset: { $regex: search.toUpperCase() } },
+                { sn: { $regex: search.toUpperCase() } }
+            ]
+        }
     }
 
     // Cek apakah request memenita semua
