@@ -41,6 +41,8 @@ app.use(methodOverride('_method'));
 
 app.post('/postdate', (req,res)=>{
     console.log(req.body.waktu)
+    req.flash('msg', `waktu nya ${req.body.waktu}`);
+
     res.redirect('/cobadatetime')
 })
 
