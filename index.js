@@ -39,8 +39,13 @@ app.use(flash());
 // override with the X-HTTP-Method-Override header in the request
 app.use(methodOverride('_method'));
 
-app.get('/ini', (req, res) => {
-    res.send('Hello Mas Teguh');
+app.post('/postdate', (req,res)=>{
+    console.log(req.body.waktu)
+    res.redirect('/cobadatetime')
+})
+
+app.get('/cobadatetime', (req, res) => {
+    res.render('cobadatetimepicker', { layout: 'layouts/main-layout', title: 'DateTime', msg: req.flash('msg') })
 });
 
 app.post('/add', (req, res) => {
