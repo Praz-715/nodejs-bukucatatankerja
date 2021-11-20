@@ -39,16 +39,6 @@ app.use(flash());
 // override with the X-HTTP-Method-Override header in the request
 app.use(methodOverride('_method'));
 
-app.post('/postdate', (req,res)=>{
-    console.log(req.body.waktu)
-    req.flash('msg', `waktu nya ${req.body.waktu}`);
-
-    res.redirect('/cobadatetime')
-})
-
-app.get('/cobadatetime', (req, res) => {
-    res.render('cobadatetimepicker', { layout: 'layouts/main-layout', title: 'DateTime', msg: req.flash('msg') })
-});
 
 app.post('/add', (req, res) => {
     const lokasi = req.body.lokasi.toUpperCase();
@@ -93,7 +83,7 @@ app.post('/add', (req, res) => {
 
     AssetKerja.insertMany({ lokasi, tipeaset, sn, status, keterangan, upload }, (error, result) => {
             // sebelum redirect kirim flash
-            req.flash('msg', 'Data Contact berhasil ditambahkan');
+            req.flash('msg', `${lokasi} SN ${sn} ${status} berhasil ditambahkan`);
             res.redirect('/add');
         })
         // res.json(req.body);
