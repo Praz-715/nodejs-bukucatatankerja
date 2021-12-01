@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
     <div class="container">
-        <a class="navbar-brand text-danger" href="/add">MAS TEGUH</a>
+        <a class="navbar-brand text-danger" href="/add">Tambah Data</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -42,7 +42,7 @@
                                     <div class="modal-body">
 
                                         <div class="mb-3 row">
-                                            <h5>Pilih</h5>
+                                            <h5>Keterangan</h5>
                                             <div class="col">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="OK" id="OK" name="pilihan">
@@ -78,7 +78,7 @@
                                         </div>
                                         <div class="input-group mb-3">
                                             <% const tanggalsekarang = new Date %>
-                                                <span class="input-group-text">Gimana</span>
+                                                <span class="input-group-text">Pilih</span>
                                                 <div class="d-block mx-3">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="opsi" value="hariini" id="hariini">
@@ -128,16 +128,13 @@
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <a href="reports" name="print" value="print" class="btn btn-info">LIST REPORT</a>
                             <button type="submit" name="excel" value="excel" class="btn btn-success">EXCEL</button>
-                            <button type="submit" name="print" value="print" class="btn btn-primary">PRINT</button>
+                            <!-- <button type="submit" name="print" value="print" class="btn btn-primary">PRINT</button> -->
                         </div>
                         </form>
                     </div>
         </div>
     </div>
 
-    </li>
-    <li class="nav-item">
-        <a href="/cobadatetime" class="nav-link">cobadatetime</a>
     </li>
     </ul>
     <form action="/" class="d-flex" method="GET">
