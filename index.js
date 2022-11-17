@@ -282,8 +282,12 @@ app.get('/', async(req, res) => {
     };
 
     // Ambil tanggal untuk pencarian
-    const tanggal = await AssetKerja.distinct('upload');
+    // const tanggal = await AssetKerja.distinct('upload');
+    let tanggal = await AssetKerja.find({}, 'upload');
+    tanggal = new Set(tanggal.map(e=>e.upload))
+    tanggal = Array.from(tanggal)
     tanggal.reverse();
+    // console.log(tanggal)
 
     // Opsi tanggal kedua
     // const ambilTanggal = await AssetKerja.aggregate([
