@@ -359,7 +359,7 @@ app.get('/', async(req, res) => {
         optionFilter = null;
     }
 
-    // console.log(optionFilter)
+    console.log(optionFilter)
 
     // ambil data dari Model
     const data = await AssetKerja.find(optionFilter);
@@ -376,3 +376,4 @@ app.listen(port, () => {
 });
 
 //Run app, then load http://localhost:3000 in a browser to see the output.
+export default app;
