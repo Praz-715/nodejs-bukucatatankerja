@@ -11,7 +11,7 @@ const flash = require('connect-flash');
 const exportCatatanKerjaToExcel = require('./utils/exportService');
 
 const app = express();
-const PORT = parseInt(process.env.PORT) || 3000;
+const port = parseInt(process.env.PORT) || 3000;
 
 // Setup connection DB
 require('./utils/db');
